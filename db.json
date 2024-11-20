@@ -1,0 +1,22 @@
+{
+  "foods": [
+    {
+      "id": "1",
+      "no": 1,
+      "namaguru": "Haidar",
+      "mapel": "Programer",
+      "nik": 1,
+      "gender": "Laki-laki",
+      "jabatan": "Ketua"
+    },
+    {
+      "id": "2",
+      "no": 2,
+      "namaguru": "Avecenaa",
+      "mapel": "Programer",
+      "nik": 2,
+      "gender": "Laki-laki",
+      "jabatan": "Wakil Ketua"
+    }
+  ]
+}
