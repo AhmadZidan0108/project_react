@@ -1,78 +1,116 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Navbar from './component/Navbar';
+import React from "react";
+import { Button, Box, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import PersonIcon from "@mui/icons-material/Person"; // Ikon untuk Data Guru
+import SchoolIcon from "@mui/icons-material/School"; // Ikon untuk Data Siswa
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+const Home = () => {
+  const navigate = useNavigate(); // Hook untuk navigasi ke halaman lain
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
+  // Fungsi untuk navigasi ke halaman Data Guru
+  const handleGoToDataGuru = () => {
+    navigate("/Dataguru");
+  };
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+  // Fungsi untuk navigasi ke halaman Data Siswa
+  const handleGoToDataSiswa = () => {
+    navigate("/Datasiswa");
+  };
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-export default function CustomizedTables() {
   return (
-    <>
-    <Navbar />
+    <Box
+      sx={{
+        // Mengatur layout utama dengan flexbox agar elemen berada di tengah
+        display: "flex",
+        flexDirection: "column", // Elemen disusun secara vertikal
+        alignItems: "center", // Posisi elemen di tengah horizontal
+        justifyContent: "center", // Posisi elemen di tengah vertikal
+        minHeight: "100vh", // Tinggi minimal layar 100% dari tinggi viewport
+        background: "linear-gradient(135deg, #2C3E50, #4A6071)", // Latar belakang dengan gradasi warna
+        padding: 3, // Padding untuk memberi ruang di dalam elemen
+        boxSizing: "border-box", // Menghitung padding agar tidak memengaruhi ukuran total
+      }}
+    >
+      {/* Judul halaman dengan animasi fade-in */}
+      <Typography
+        variant="h4"
+        gutterBottom
+        sx={{
+          color: "#ECF0F1", // Warna teks terang agar kontras dengan latar
+          fontWeight: "700", // Ketebalan font untuk judul
+          letterSpacing: 1.2, // Memberikan jarak antar huruf
+          marginBottom: 4, // Memberikan margin bawah
+          animation: "fadeIn 1.5s ease-out", // Animasi muncul perlahan
+          "@keyframes fadeIn": {
+            "0%": { opacity: 0, transform: "translateY(-20px)" }, // Awal animasi: opacity 0 dan naik sedikit
+            "100%": { opacity: 1, transform: "translateY(0)" }, // Akhir animasi: opacity penuh dan posisi normal
+          },
+        }}
+      >
+        Selamat datang di data sederhana Zidan
+      </Typography>
 
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </>
-  )
+      {/* Kontainer untuk tombol */}
+      <Box
+        sx={{
+          // Mengatur layout tombol dengan flexbox
+          display: "flex",
+          flexDirection: "column", // Elemen disusun vertikal
+          alignItems: "center", // Posisi elemen di tengah horizontal
+          gap: 3, // Jarak antara tombol
+          padding: 3, // Memberikan padding di dalam kotak
+          borderRadius: 3, // Sudut kotak menjadi melengkung
+          background: "rgba(255, 255, 255, 0.9)", // Latar belakang putih dengan sedikit transparansi
+          backdropFilter: "blur(10px)", // Efek blur di belakang kotak
+          boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)", // Shadow untuk efek 3D
+          width: "90%", // Lebar kotak 90% dari layar
+          maxWidth: 400, // Lebar maksimal kotak 400px
+        }}
+      >
+        {/* Tombol untuk Data Guru */}
+        <Button
+          variant="contained"
+          sx={{
+            width: "100%", // Lebar tombol penuh dalam kotak
+            padding: "12px 18px", // Padding tombol untuk ukuran proporsional
+            background: "linear-gradient(135deg, #3498DB, #2980B9)", // Gradasi warna biru untuk tombol
+            color: "#fff", // Warna teks putih
+            fontWeight: "600", // Ketebalan teks tombol
+            transition: "all 0.3s ease", // Transisi halus untuk hover
+            "&:hover": {
+              background: "linear-gradient(135deg, #2980B9, #1A73E8)", // Warna gradasi lebih terang saat hover
+              transform: "scale(1.05)", // Efek zoom saat hover
+            },
+          }}
+          onClick={handleGoToDataGuru} // Fungsi yang dijalankan saat tombol diklik
+          startIcon={<PersonIcon />} // Ikon di awal teks tombol
+        >
+          Data Guru
+        </Button>
+
+        {/* Tombol untuk Data Siswa */}
+        <Button
+          variant="contained"
+          sx={{
+            width: "100%", // Lebar tombol penuh dalam kotak
+            padding: "12px 18px", // Padding tombol
+            background: "linear-gradient(135deg, #E74C3C, #C0392B)", // Gradasi warna merah untuk tombol
+            color: "#fff", // Warna teks putih
+            fontWeight: "600", // Ketebalan teks tombol
+            transition: "all 0.3s ease", // Transisi halus untuk hover
+            "&:hover": {
+              background: "linear-gradient(135deg, #C0392B, #A93226)", // Warna gradasi lebih terang saat hover
+              transform: "scale(1.05)", // Efek zoom saat hover
+            },
+          }}
+          onClick={handleGoToDataSiswa} // Fungsi yang dijalankan saat tombol diklik
+          startIcon={<SchoolIcon />} // Ikon di awal teks tombol
+        >
+          Data Siswa
+        </Button>
+      </Box>
+    </Box>
+  );
 };
+
+export default Home;

@@ -1,3 +1,4 @@
+// Impor pustaka React dan pustaka lain yang diperlukan
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
@@ -17,89 +18,97 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
-import CheckroomIcon from '@mui/icons-material/Checkroom';
+// Ikon modern untuk sidebar
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import GroupIcon from '@mui/icons-material/Group';
+import SchoolIcon from '@mui/icons-material/School';
 
-const drawerWidth = 240; // Width of the sidebar
+// Lebar sidebar default
+const drawerWidth = 240;
+
+// Daftar item navigasi beserta label, path, dan ikon
 const navItems = [
-  { label: 'Dataguru', path: '/Dataguru' },
-]
+  { label: 'Dashboard', path: '/Dashboard', icon: <DashboardCustomizeIcon /> },
+  { label: 'Dataguru', path: '/Dataguru', icon: <GroupIcon /> },
+  { label: 'Datasiswa', path: '/Datasiswa', icon: <SchoolIcon /> },
+];
 
-// Light Blue theme with updated colors
+// Tema kustom untuk Material-UI
 const theme = createTheme({
   palette: {
-    primary: { main: '#4fa3d1' },  // Light Blue
-    secondary: { main: '#0288d1' }, // Darker Blue for secondary elements
-    background: { default: '#e1f5fe' }, // Light blue background
+    primary: { main: '#1A202C' }, // Warna utama (gelap)
+    secondary: { main: '#F6AD55' }, // Warna aksen (orange)
+    background: { default: '#F7FAFC' }, // Warna latar belakang
   },
   typography: {
-    fontFamily: '"Roboto", sans-serif',  // Modern font
+    fontFamily: '"Roboto", sans-serif', // Font utama
     h6: {
-      fontWeight: 'bold',
-      letterSpacing: '0.5px',
+      fontWeight: '700', // Ketebalan font heading
+      letterSpacing: '0.5px', // Jarak antar huruf
     },
   },
 });
 
 function Navbar(props) {
   const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [collapsed, setCollapsed] = React.useState(false); // For sidebar toggle
-  const location = useLocation(); // Get the current location
+  const [mobileOpen, setMobileOpen] = React.useState(false); // Status untuk toggle drawer pada mode mobile
+  const [collapsed, setCollapsed] = React.useState(false); // Status untuk toggle mode collapsed sidebar
+  const location = useLocation(); // Mendapatkan URL path aktif saat ini
 
+  // Fungsi untuk membuka/menutup drawer di mobile
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  // Fungsi untuk mengatur mode collapsed/expanded pada sidebar
   const handleCollapseToggle = () => {
-    setCollapsed(!collapsed); // Toggle between expanded and collapsed sidebar
+    setCollapsed(!collapsed);
   };
 
+  // Konten sidebar
   const drawerContent = (
     <Box
       sx={{
         textAlign: 'center',
-        background: 'linear-gradient(135deg, #4fa3d1 30%, #81d4fa)', // Light Blue gradient
+        background: 'linear-gradient(135deg, #1A202C 30%, #2D3748)', // Gradien warna gelap
         height: '100%',
-        color: '#fff',
+        color: '#E2E8F0', // Warna teks
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       }}
     >
+      {/* Judul atau logo sidebar */}
       <Typography variant="h6" sx={{ my: 2 }}>
-        {collapsed ? 'D' : 'Data'}
+        {collapsed ? 'D' : 'Data'} {/* Jika collapsed, tampilkan singkatan */}
       </Typography>
-      <Divider sx={{ background: '#fff' }} />
+      <Divider sx={{ background: '#E2E8F0' }} />
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding>
             <ListItemButton
-              component={Link}
+              component={Link} // Menggunakan Link untuk navigasi
               to={item.path}
               sx={{
                 textAlign: 'center',
                 justifyContent: collapsed ? 'center' : 'flex-start',
                 px: 2,
-                backgroundColor: location.pathname === item.path ? '#81d4fa' : 'transparent',
+                backgroundColor: location.pathname === item.path ? '#4A5568' : 'transparent', // Highlight item aktif
                 '&:hover': {
-                  backgroundColor: '#80deea', // Hover effect with soft cyan
+                  backgroundColor: '#2D3748', // Warna hover
                 },
-                transition: 'background-color 0.3s',
               }}
             >
-              {item.label === 'Makanan' && <RestaurantIcon sx={{ color: '#fff' }} />}
-              {item.label === 'Minuman' && <LocalDrinkIcon sx={{ color: '#fff' }} />}
-              {item.label === 'Pakaian Adat' && <CheckroomIcon sx={{ color: '#fff' }} />}
+              {/* Ikon untuk setiap item */}
+              {item.icon}
               {!collapsed && (
                 <ListItemText
-                  primary={item.label}
+                  primary={item.label} // Label item
                   sx={{
                     ml: 2,
-                    color: '#fff',
+                    color: '#E2E8F0',
                     fontSize: '16px',
-                    fontWeight: '500', // Slightly bold text for better legibility
+                    fontWeight: '500',
                   }}
                 />
               )}
@@ -107,13 +116,14 @@ function Navbar(props) {
           </ListItem>
         ))}
       </List>
+      {/* Tombol untuk collapse/expand sidebar */}
       <IconButton
         onClick={handleCollapseToggle}
         sx={{
           position: 'absolute',
           bottom: 10,
           left: collapsed ? 8 : drawerWidth - 48,
-          color: '#fff',
+          color: '#E2E8F0',
         }}
       >
         {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -121,6 +131,7 @@ function Navbar(props) {
     </Box>
   );
 
+  // Mendukung responsivitas dengan container yang sesuai
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
@@ -130,11 +141,13 @@ function Navbar(props) {
         <AppBar
           position="fixed"
           sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-            backgroundColor: '#0288d1', // Darker blue for AppBar
+            zIndex: (theme) => theme.zIndex.drawer + 2,
+            backgroundColor: '#1A202C', // Warna AppBar
+            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Bayangan
           }}
         >
           <Toolbar>
+            {/* Tombol menu pada tampilan mobile */}
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -144,20 +157,21 @@ function Navbar(props) {
             >
               <MenuIcon />
             </IconButton>
+            {/* Judul aplikasi */}
             <Typography
               variant="h6"
               component="div"
               sx={{
                 flexGrow: 1,
                 display: { xs: 'none', sm: 'block' },
-                letterSpacing: '0.5px',  // Slight letter spacing for clean look
+                letterSpacing: '0.5px',
               }}
             >
-              Data
+              Data tabel sederhana guru dan siswa SMK BINA NUSANTARA
             </Typography>
           </Toolbar>
         </AppBar>
-        {/* Mobile Sidebar */}
+        {/* Sidebar untuk tampilan mobile */}
         <Drawer
           container={container}
           variant="temporary"
@@ -168,38 +182,40 @@ function Navbar(props) {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: collapsed ? 60 : drawerWidth },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: collapsed ? 60 : drawerWidth,
+            },
           }}
         >
           {drawerContent}
         </Drawer>
-        {/* Desktop Sidebar */}
+        {/* Sidebar untuk tampilan desktop */}
         <Drawer
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: collapsed ? 60 : drawerWidth,
-              transition: 'width 0.3s ease', // Smooth transition for collapse effect
+              width: collapsed ? 60 : drawerWidth, // Menyesuaikan lebar saat collapsed
+              transition: 'width 0.3s ease', // Animasi transisi
             },
           }}
           open
         >
           {drawerContent}
         </Drawer>
-
+        {/* Area konten utama */}
         <Box
           component="main"
           sx={{
             flexGrow: 1,
             p: 3,
-            ml: { sm: collapsed ? 0 : `${drawerWidth}px` },
-            transition: 'margin-left 0.3s', // Smooth transition when sidebar collapses
+            ml: { sm: collapsed ? 0 : `${drawerWidth}px` }, // Menyesuaikan margin konten
+            transition: 'margin-left 0.3s', // Animasi transisi
           }}
         >
           <Toolbar />
-          {/* Main content goes here */}
         </Box>
       </Box>
     </ThemeProvider>
@@ -207,7 +223,7 @@ function Navbar(props) {
 }
 
 Navbar.propTypes = {
-  window: PropTypes.func,
+  window: PropTypes.func, // Props untuk mendukung fungsi window
 };
 
 export default Navbar;

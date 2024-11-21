@@ -1,22 +1,93 @@
 {
   "foods": [
     {
-      "id": "1",
-      "no": 1,
-      "namaguru": "Haidar",
+      "namaguru": "Aveceena",
       "mapel": "Programer",
       "nik": 1,
       "gender": "Laki-laki",
-      "jabatan": "Ketua"
+      "jabatan": "Ketua",
+      "id": "1"
+    },
+    {
+      "namaguru": "Haidar",
+      "mapel": "Programer",
+      "nik": 2,
+      "gender": "Laki-laki",
+      "jabatan": "Wakil Ketua",
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "no": 3,
+      "namaguru": "Dani",
+      "mapel": "Programer",
+      "nik": 3,
+      "gender": "Laki-laki",
+      "jabatan": "Sekertaris"
+    },
+    {
+      "id": "4",
+      "no": 4,
+      "namaguru": "Davina",
+      "mapel": "Programer",
+      "nik": 4,
+      "gender": "Perempuan",
+      "jabatan": "Bendahara"
+    },
+    {
+      "id": "5",
+      "no": 5,
+      "namaguru": "Niscita",
+      "mapel": "Programer",
+      "nik": 5,
+      "gender": "Perempuan",
+      "jabatan": "Anggota"
+    }
+  ],
+  "siswa": [
+    {
+      "namasiswa": "Izzul",
+      "kelas": 10,
+      "jurusan": "TKJ",
+      "nisn": 1,
+      "asalsekolah": "SMK BINUS",
+      "id": "1"
     },
     {
       "id": "2",
       "no": 2,
-      "namaguru": "Avecenaa",
-      "mapel": "Programer",
-      "nik": 2,
-      "gender": "Laki-laki",
-      "jabatan": "Wakil Ketua"
+      "namasiswa": "Rizki",
+      "kelas": 10,
+      "jurusan": "TKJ",
+      "nisn": 2,
+      "asalsekolah": "SMK BINUS"
+    },
+    {
+      "id": "3",
+      "no": 3,
+      "namasiswa": "Bisma",
+      "kelas": 10,
+      "jurusan": "TKJ",
+      "nisn": 3,
+      "asalsekolah": "SMK BINUS"
+    },
+    {
+      "id": "4",
+      "no": 4,
+      "namasiswa": "Tanjung",
+      "kelas": 10,
+      "jurusan": "TKJ",
+      "nisn": 4,
+      "asalsekolah": "SMK BINUS"
+    },
+    {
+      "id": "5",
+      "no": 5,
+      "namasiswa": "Dimas",
+      "kelas": 10,
+      "jurusan": "TKJ",
+      "nisn": 5,
+      "asalsekolah": "SMK BINUS"
     }
   ]
 }

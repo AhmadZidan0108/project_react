@@ -1,80 +1,89 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react"; // Mengimpor React dan hooks useEffect dan useState
+import axios from "axios"; // Mengimpor axios untuk melakukan request HTTP
+import { useNavigate, useParams } from "react-router-dom"; // Mengimpor hooks dari react-router-dom untuk navigasi dan mendapatkan parameter URL
+import TextField from "@mui/material/TextField"; // Mengimpor komponen TextField dari Material UI untuk input data
+import Button from "@mui/material/Button"; // Mengimpor komponen Button dari Material UI
+import Typography from "@mui/material/Typography"; // Mengimpor komponen Typography dari Material UI untuk teks
+import Box from "@mui/material/Box"; // Mengimpor komponen Box dari Material UI untuk layout
+import Paper from "@mui/material/Paper"; // Mengimpor komponen Paper dari Material UI untuk memberikan efek kertas
+import Swal from "sweetalert2"; // Mengimpor SweetAlert2 untuk menampilkan alert (pop-up)
 
 export default function EditData() {
+  // Mendefinisikan state untuk menyimpan nilai input dari form
   const [namaguru, setNamaguru] = useState("");
   const [mapel, setMapel] = useState("");
   const [nik, setNik] = useState("");
   const [gender, setGender] = useState("");
   const [jabatan, setJabatan] = useState("");
-  const [minuman, setMinuman] = useState("");
-  const [harga, setHarga] = useState(0);
-  const [asal, setAsal] = useState("");
-  const [dataguru, setDataguru] = useState([]);
-  const { id } = useParams(); // Get the ID from URL
-  const navigate = useNavigate();
 
-  // Fetch data minuman based on the ID from the URL
+  const { id } = useParams(); // Mengambil ID dari URL
+  const navigate = useNavigate(); // Hook untuk navigasi
+
+  // Mengambil data berdasarkan ID yang ada di URL
   useEffect(() => {
     if (!id) {
-      Swal.fire("Gagal!", "ID data tidak valid!", "error");
+      Swal.fire("Gagal!", "ID data tidak valid!", "error"); // Jika ID tidak ada, tampilkan alert
       return;
     }
 
     const fetchFood = async () => {
       try {
+        // Melakukan request GET ke API untuk mengambil data berdasarkan ID
         const response = await axios.get(`http://localhost:3030/foods/${id}`);
         const food = response.data;
 
+        // Jika data tidak ditemukan
         if (!food) {
           Swal.fire("Gagal!", "Data tidak ditemukan.", "error");
-          navigate("/Dashboard"); // Redirect to Dashboard if food is not found
+          navigate("/Dataguru"); // Navigasi kembali ke halaman daftar guru
           return;
         }
 
-        setMinuman(food.minuman);
-        setHarga(food.harga);
-        setAsal(food.asal);
+        // Set nilai state dengan data yang diambil dari API
+        setNamaguru(food.namaguru);
+        setMapel(food.mapel);
+        setNik(food.nik);
+        setGender(food.gender);
+        setJabatan(food.jabatan);
       } catch (error) {
+        // Menangani error jika request gagal
         console.error("Error fetching data:", error);
         Swal.fire("Gagal!", "Terjadi kesalahan saat mengambil data.", "error");
-        navigate("/Dashboard"); // Redirect to Dashboard if there's an error
+        navigate("/Dataguru"); // Navigasi kembali ke halaman daftar guru jika error
       }
     };
 
-    fetchFood();
-  }, [id, navigate]); // Add navigate to dependencies to ensure it updates properly
+    fetchFood(); // Panggil fungsi untuk mengambil data
+  }, [id, navigate]); // Hook akan dijalankan saat ID atau navigate berubah
 
+  // Fungsi untuk menangani pengiriman form
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Mencegah refresh halaman saat form disubmit
 
-    // Validate inputs
-    if (!minuman || !harga || !asal) {
-      Swal.fire("Gagal!", "Semua field wajib diisi!", "error");
+    // Validasi input agar tidak ada data yang kosong
+    if (!namaguru || !nik) {
+      Swal.fire("Gagal!", "Semua data wajib diisi!", "error");
       return;
     }
 
     try {
-      // Prepare data to update minuman
-      const updatedMinuman = {
-        minuman,
-        harga: parseInt(harga),
-        asal,
+      // Menyiapkan data yang akan dikirim untuk update
+      const updatedDataguru = {
+        namaguru,
+        mapel,
+        nik: parseInt(nik), // Mengubah nik menjadi tipe data integer
+        gender,
+        jabatan,
       };
 
-      // Send PUT request to update data
-      await axios.put(`http://localhost:3030/foods/${id}`, updatedMinuman);
+      // Mengirim request PUT untuk memperbarui data
+      await axios.put(`http://localhost:3030/foods/${id}`, updatedDataguru);
 
+      // Menampilkan alert jika berhasil
       Swal.fire("Berhasil!", "Perubahan data berhasil disimpan.", "success");
-      navigate("/Dataguru"); // Go back to dashboard after success
+      navigate("/Dataguru"); // Navigasi kembali ke halaman daftar guru setelah berhasil
     } catch (error) {
+      // Menangani error jika request PUT gagal
       console.error("Error updating data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan perubahan data.", "error");
     }
@@ -84,46 +93,48 @@ export default function EditData() {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#dcdcdc", // Ganti warna background menjadi abu-abu terang
+        justifyContent: "center", // Membuat layout di tengah
+        alignItems: "center", // Menjaga agar semua item terpusat secara vertikal
+        height: "100vh", // Mengatur tinggi container sesuai tinggi layar
+        backgroundColor: "#dcdcdc", // Memberikan warna latar belakang abu-abu terang
       }}
     >
       <Paper
-        elevation={6}
+        elevation={6} // Memberikan efek bayangan pada kertas
         sx={{
-          p: 4,
-          width: "400px",
+          p: 4, // Memberikan padding pada seluruh sisi
+          width: "400px", // Mengatur lebar container
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "center", // Center all content vertically
-          gap: 2,
+          flexDirection: "column", // Mengatur elemen-elemen dalam kolom
+          justifyContent: "center", // Menjaga konten agar terpusat secara vertikal
+          gap: 2, // Memberikan jarak antar elemen
         }}
       >
         <Typography
-          variant="h4"  // Change size to make it more prominent
+          variant="h4" // Menentukan ukuran teks
           sx={{
-            textAlign: "center",
-            mb: 2,
-            color: "primary.main",
-            fontWeight: "500", // Make it slightly lighter for a friendlier look
-            letterSpacing: "1px", // Add some space for a more relaxed feel
-            textShadow: "1px 1px 5px rgba(0, 0, 0, 0.2)", // Subtle shadow effect for a softer look
-            fontFamily: "'Poppins', sans-serif", // Optional: you can use a Google Font like Poppins
+            textAlign: "center", // Menyelaraskan teks ke tengah
+            mb: 2, // Memberikan margin bawah
+            color: "primary.main", // Mengatur warna teks sesuai dengan warna utama tema
+            fontWeight: "500", // Mengatur ketebalan font
+            letterSpacing: "1px", // Memberikan jarak antar huruf
+            textShadow: "1px 1px 5px rgba(0, 0, 0, 0.2)", // Memberikan efek bayangan pada teks
+            fontFamily: "'Poppins', sans-serif", // Menggunakan font Poppins
           }}
         >
-          Edit Minuman
+          Edit Data
         </Typography>
         <form onSubmit={handleSubmit}>
+          {/* Form input untuk nama guru */}
           <TextField
             label="Nama Guru"
             variant="outlined"
             fullWidth
             value={namaguru}
-            onChange={(e) => setDataguru(e.target.value)}
+            onChange={(e) => setNamaguru(e.target.value)} // Update state saat input berubah
             sx={{ mb: 2 }}
           />
+          {/* Form input untuk mata pelajaran */}
           <TextField
             label="Mapel"
             variant="outlined"
@@ -132,6 +143,7 @@ export default function EditData() {
             onChange={(e) => setMapel(e.target.value)}
             sx={{ mb: 2 }}
           />
+          {/* Form input untuk NIK */}
           <TextField
             label="Nik"
             variant="outlined"
@@ -141,6 +153,7 @@ export default function EditData() {
             onChange={(e) => setNik(e.target.value)}
             sx={{ mb: 2 }}
           />
+          {/* Form input untuk gender */}
           <TextField
             label="Gender"
             variant="outlined"
@@ -149,6 +162,7 @@ export default function EditData() {
             onChange={(e) => setGender(e.target.value)}
             sx={{ mb: 2 }}
           />
+          {/* Form input untuk jabatan */}
           <TextField
             label="Jabatan"
             variant="outlined"
@@ -158,6 +172,7 @@ export default function EditData() {
             sx={{ mb: 2 }}
           />
           <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+            {/* Tombol untuk submit data */}
             <Button variant="contained" color="primary" type="submit">
               Simpan Perubahan
             </Button>

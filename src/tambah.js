@@ -1,61 +1,64 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Swal from "sweetalert2";
+import React, { useState } from "react";  // Mengimpor React dan hook useState untuk mengelola state dalam komponen
+import axios from "axios";  // Mengimpor axios untuk melakukan permintaan HTTP
+import { useNavigate } from "react-router-dom";  // Mengimpor useNavigate untuk menavigasi antar halaman
+import TextField from "@mui/material/TextField";  // Mengimpor komponen TextField dari Material-UI untuk input teks
+import Button from "@mui/material/Button";  // Mengimpor komponen Button dari Material-UI
+import Typography from "@mui/material/Typography";  // Mengimpor komponen Typography untuk teks
+import Box from "@mui/material/Box";  // Mengimpor Box untuk pengaturan layout
+import Paper from "@mui/material/Paper";  // Mengimpor Paper untuk elemen dengan tampilan kartu
+import Swal from "sweetalert2";  // Mengimpor SweetAlert2 untuk menampilkan notifikasi
 
 export default function TambahDataguru() {
-  const [namaguru, setDataguru] = useState("");
-  const [mapel, setMapel] = useState("");
-  const [nik, setNik] = useState("");
-  const [gender, setGender] = useState("");
-  const [jabatan, setJabatan] = useState("");
-  const [minuman, setMinuman] = useState("");
-const [asal, setAsal] = useState("");
-  const navigate = useNavigate();
+  // Deklarasi state untuk menyimpan data inputan
+  const [namaguru, setDataguru] = useState("");  // Nama guru
+  const [mapel, setMapel] = useState("");  // Mata pelajaran
+  const [nik, setNik] = useState("");  // Nomor Induk Kependudukan (NIK)
+  const [gender, setGender] = useState("");  // Jenis kelamin
+  const [jabatan, setJabatan] = useState("");  // Jabatan guru
+  const [minuman, setMinuman] = useState("");  // (Tidak digunakan dalam kode, bisa dihapus)
+  const [asal, setAsal] = useState("");  // (Tidak digunakan dalam kode, bisa dihapus)
+  const navigate = useNavigate();  // Hook untuk navigasi ke halaman lain
 
+  // Fungsi untuk menangani pengiriman form
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();  // Mencegah refresh halaman saat form disubmit
 
-    // Validasi sederhana
-    if (!namaguru || !nik) {  // Perbaiki sintaksis di sini
-      Swal.fire("Gagal!", "Semua field wajib diisi!", "error");
-      return;
+    // Validasi sederhana: pastikan nama guru dan NIK tidak kosong
+    if (!namaguru || !nik) {  // Jika nama guru atau NIK kosong
+      Swal.fire("Gagal!", "Semua field wajib diisi!", "error");  // Tampilkan alert error
+      return;  // Hentikan eksekusi lebih lanjut
     }
 
     try {
-      // Dapatkan data minuman untuk menentukan ID terakhir
-      const response = await axios.get("http://localhost:3030/foods");
-      const foods = response.data;
+      // Ambil data minuman (terlihat tidak digunakan di form, tapi mungkin ada kegunaan lain)
+      const response = await axios.get("http://localhost:3030/foods");  // Mengambil data dari API
+      const foods = response.data;  // Menyimpan data yang diterima dari API
 
-      // Cari ID terbesar
+      // Cari ID terbesar dari data yang ada
       const lastId = foods.length > 0
-        ? Math.max(...foods.map((food) => parseInt(food.id)))
-        : 0;
+        ? Math.max(...foods.map((food) => parseInt(food.id)))  // ID terbesar diambil dari data food
+        : 0;  // Jika tidak ada data, ID dimulai dari 0
 
-      // Buat data minuman baru
+      // Membuat objek data baru untuk guru
       const newDataguru = {
-        id: (lastId + 1).toString(),
-        no: lastId + 1,
+        id: (lastId + 1).toString(),  // ID baru yang ditambah 1 dari ID terakhir
+        no: lastId + 1,  // Nomor urut berdasarkan ID terakhir
         namaguru,
         mapel,
-        nik: parseInt(nik),
+        nik: parseInt(nik),  // Pastikan NIK dalam bentuk integer
         gender,
         jabatan,
       };
 
       // Kirim data baru ke server
-      await axios.post("http://localhost:3030/foods", newDataguru);
+      await axios.post("http://localhost:3030/foods", newDataguru);  // Post data ke API
 
+      // Menampilkan alert berhasil
       Swal.fire("Berhasil!", "Data berhasil ditambahkan.", "success");
-      navigate("/Dataguru"); // Kembali ke halaman utama setelah berhasil
+      navigate("/Dataguru");  // Navigasi kembali ke halaman daftar guru setelah berhasil
     } catch (error) {
-      console.error("Error adding data:", error);
-      Swal.fire("Gagal!", "Terjadi kesalahan saat menambahkan data.", "error");
+      console.error("Error adding data:", error);  // Menampilkan error di console jika terjadi kesalahan
+      Swal.fire("Gagal!", "Terjadi kesalahan saat menambahkan data.", "error");  // Menampilkan alert gagal
     }
   };
 
@@ -63,80 +66,80 @@ const [asal, setAsal] = useState("");
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: "#f5f5f5",
+        justifyContent: "center",  // Mengatur layout agar form berada di tengah halaman
+        alignItems: "center",  // Mengatur agar form vertikal di tengah
+        height: "100vh",  // Set tinggi Box sesuai tinggi viewport
+        backgroundColor: "#f5f5f5",  // Set warna latar belakang
       }}
     >
       <Paper
-        elevation={6}
+        elevation={6}  // Set elevation untuk Paper agar terlihat lebih tinggi
         sx={{
-          p: 4,
-          width: "400px",
+          p: 4,  // Padding di dalam Paper
+          width: "400px",  // Lebar Paper
           display: "flex",
-          flexDirection: "column",
-          gap: 2,
+          flexDirection: "column",  // Susunan kolom
+          gap: 2,  // Jarak antar elemen
         }}
       >
         <Typography
           variant="h5"
-          sx={{ textAlign: "center", mb: 2, color: "primary.main" }}
+          sx={{ textAlign: "center", mb: 2, color: "primary.main" }}  // Teks judul form
         >
           Tambah data Baru
         </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
-            label="NamaGuru"
+            label="Nama Guru"  // Label untuk field NamaGuru
             variant="outlined"
             fullWidth
-            value={namaguru}
-            onChange={(e) => setDataguru(e.target.value)}
-            sx={{ mb: 2 }}
+            value={namaguru}  // Nilai field NamaGuru
+            onChange={(e) => setDataguru(e.target.value)}  // Update state NamaGuru saat input berubah
+            sx={{ mb: 2 }}  // Margin bawah
           />
           <TextField
-            label="Mapel"
+            label="Mapel"  // Label untuk field Mapel
             variant="outlined"
             fullWidth
-            value={mapel}
-            onChange={(e) => setMapel(e.target.value)}
-            sx={{ mb: 2 }}
+            value={mapel}  // Nilai field Mapel
+            onChange={(e) => setMapel(e.target.value)}  // Update state Mapel
+            sx={{ mb: 2 }}  // Margin bawah
           />
           <TextField
-            label="Nik"
+            label="Nik"  // Label untuk field NIK
             variant="outlined"
             fullWidth
-            type="number"
-            value={nik}
-            onChange={(e) => setNik(e.target.value)}
-            sx={{ mb: 2 }}
+            type="number"  // Tipe input angka untuk NIK
+            value={nik}  // Nilai field NIK
+            onChange={(e) => setNik(e.target.value)}  // Update state NIK
+            sx={{ mb: 2 }}  // Margin bawah
           />
            <TextField
-            label="Gender"
+            label="Gender"  // Label untuk field Gender
             variant="outlined"
             fullWidth
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            sx={{ mb: 2 }}
+            value={gender}  // Nilai field Gender
+            onChange={(e) => setGender(e.target.value)}  // Update state Gender
+            sx={{ mb: 2 }}  // Margin bawah
           />
            <TextField
-            label="Jabatan"
+            label="Jabatan"  // Label untuk field Jabatan
             variant="outlined"
             fullWidth
-            value={jabatan}
-            onChange={(e) => setJabatan(e.target.value)}
-            sx={{ mb: 2 }}
+            value={jabatan}  // Nilai field Jabatan
+            onChange={(e) => setJabatan(e.target.value)}  // Update state Jabatan
+            sx={{ mb: 2 }}  // Margin bawah
           />
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
             <Button
               variant="contained"
               color="secondary"
-              onClick={() => navigate("/Dashboard")}
+              onClick={() => navigate("/Dashboard")}  // Navigasi ke halaman Dashboard jika dibatalkan
             >
               Batal
             </Button>
             <Button variant="contained" color="primary" type="submit">
-              Simpan
+              Simpan 
             </Button>
           </Box>
         </form>
