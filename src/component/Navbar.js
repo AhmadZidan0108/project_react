@@ -22,6 +22,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
 import GroupIcon from '@mui/icons-material/Group';
 import SchoolIcon from '@mui/icons-material/School';
+import images from "../images/images.jpg"
 
 // Lebar sidebar default
 const drawerWidth = 240;
@@ -139,38 +140,47 @@ function Navbar(props) {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar
-          position="fixed"
+      position="fixed"
+      sx={{
+        zIndex: (theme) => theme.zIndex.drawer + 2,
+        backgroundColor: '#1A202C', // Warna AppBar
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Bayangan
+      }}
+    >
+      <Toolbar>
+        {/* Tombol menu pada tampilan mobile */}
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, display: { sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+
+        {/* Logo atau Gambar */}
+        <Typography
+          variant="h6"
+          component="div"
           sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 2,
-            backgroundColor: '#1A202C', // Warna AppBar
-            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)', // Bayangan
+            flexGrow: 1,
+            display: { xs: 'none', sm: 'flex' }, // Menampilkan logo di layar lebih besar
+            alignItems: "center",
           }}
         >
-          <Toolbar>
-            {/* Tombol menu pada tampilan mobile */}
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            {/* Judul aplikasi */}
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                flexGrow: 1,
-                display: { xs: 'none', sm: 'block' },
-                letterSpacing: '0.5px',
-              }}
-            >
-              Data tabel sederhana guru dan siswa SMK BINA NUSANTARA
-            </Typography>
-          </Toolbar>
-        </AppBar>
+          {/* Menampilkan gambar logo */}
+          <img
+            src={images} // Pastikan ini adalah URL gambar yang benar
+            alt="Logo"
+            style={{
+              width: "80px", // Mengatur lebar agar proporsional
+              height: "40px", // Atur tinggi logo sesuai kebutuhan
+            }}
+          />
+        </Typography>
+      </Toolbar>
+    </AppBar>
         {/* Sidebar untuk tampilan mobile */}
         <Drawer
           container={container}

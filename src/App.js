@@ -3,13 +3,14 @@ import { Route, Routes, Navigate } from "react-router-dom"; // Mengimpor kompone
 import Home from "./Home"; // Mengimpor komponen halaman Home
 import Tugas from "./tugas"; // Mengimpor komponen halaman Tugas
 import Dashboard from "./Dashboard"; // Mengimpor komponen halaman Dashboard
-import Datasiswa from "./Datasiswa"; // Mengimpor komponen halaman Data Siswa
-import Dataguru from "./Dataguru"; // Mengimpor komponen halaman Data Guru
+import Datasiswa from "./siswa/Datasiswa"; // Mengimpor komponen halaman Data Siswa
+import Dataguru from "./guru/Dataguru"; // Mengimpor komponen halaman Data Guru
 import Tugaspakaian from "./Tugaspakaian"; // Mengimpor komponen halaman Tugas Pakaian
-import Tambah from "./tambah"; // Mengimpor komponen halaman Tambah
-import Ubahminuman from "./Ubahminuman"; // Mengimpor komponen halaman Ubah Minuman
-import Tambahsiswa from "./tambahsiswa"; // Mengimpor komponen halaman Tambah Siswa
-import Ubahsiswa from "./Ubahsiswa"; // Mengimpor komponen halaman Ubah Siswa
+import Tambah from "./guru/tambah";
+import Ubahminuman from "./guru/Ubahminuman";
+import Tambahsiswa from "./siswa/tambahsiswa";
+import Ubahsiswa from "./siswa/Ubahsiswa"; // relative import dari folder siswa
+
 
 function App() {
   return (

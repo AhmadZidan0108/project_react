@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import Navbar from "./component/Navbar"; // Mengimpor komponen Navbar untuk layout
+import Navbar from "../component/Navbar"; // Mengimpor komponen Navbar untuk layout
 import { styled } from "@mui/material/styles";
 import Swal from "sweetalert2"; // Untuk menampilkan popup seperti alert
 import { useNavigate } from "react-router-dom"; // Untuk navigasi antar halaman
@@ -19,7 +19,7 @@ import IconButton from '@mui/material/IconButton'; // Tombol untuk ikon
 // Styling untuk cell di header tabel
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black, // Latar belakang hitam untuk cell header
+    backgroundColor: "#81C784", // Latar belakang hijau muda untuk cell header
     color: theme.palette.common.white, // Warna teks putih untuk cell header
   },
   [`&.${tableCellClasses.body}`]: {
@@ -30,7 +30,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 // Styling untuk baris tabel (warna baris bergantian)
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover, // Warna latar belakang untuk baris ganjil
+    backgroundColor: "#C8E6C9", // Latar belakang hijau muda terang untuk baris ganjil
   },
   "&:last-child td, &:last-child th": {
     border: 0, // Menghilangkan border pada baris terakhir
@@ -99,17 +99,25 @@ export default function Dashboard() {
     <>
       {/* Komponen Navbar untuk navigasi atas */}
       <Navbar />
-      <div style={{ display: 'flex' }}>
+      <div 
+        style={{ 
+          display: "flex", 
+          background: "#A5D6A7",  // Latar belakang hijau muda untuk halaman utama
+          minHeight: "100vh", 
+          padding: "20px", // Memberikan jarak di seluruh halaman
+          color: "white", // Warna teks putih untuk kontras
+        }}
+      >
         {/* Sidebar placeholder (Anda bisa menambahkan sidebar di sini jika diperlukan) */}
-        <div style={{ width: '230px', flexShrink: 0 }}></div>
+        <div style={{ width: "230px", flexShrink: 0 }}></div>
 
         {/* Tabel untuk menampilkan data minuman */}
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
           <Button
             variant="contained"
             color="primary"
             onClick={handleAddDrink} // Memanggil fungsi handleAddDrink ketika diklik
-            style={{ marginBottom: "10px" }}
+            style={{ marginBottom: "10px", backgroundColor: "#66BB6A" }} // Tombol hijau muda
           >
             Tambah Data
           </Button>
