@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom"; // Untuk navigasi antar halaman
 import EditIcon from '@mui/icons-material/Edit'; // Ikon untuk Edit
 import DeleteIcon from '@mui/icons-material/Delete'; // Ikon untuk Delete
 import IconButton from '@mui/material/IconButton'; // Tombol untuk ikon
+import { Grid, useMediaQuery } from "@mui/material"; // Material-UI Grid untuk layout responsif
 
 // Styling untuk cell di header tabel
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,6 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Dashboard() {
   const [drinks, setDrinks] = useState([]); // State untuk menyimpan data minuman (dalam hal ini data dari backend)
   const navigate = useNavigate(); // Hook untuk navigasi antar halaman
+  const isMobile = useMediaQuery("(max-width:768px)"); 
 
   // useEffect hook untuk mengambil data ketika komponen pertama kali dimuat
   useEffect(() => {
@@ -100,74 +102,108 @@ export default function Dashboard() {
       {/* Komponen Navbar untuk navigasi atas */}
       <Navbar />
       <div 
-        style={{ 
-          display: "flex", 
-          background: "#A5D6A7",  // Latar belakang hijau muda untuk halaman utama
-          minHeight: "100vh", 
-          padding: "20px", // Memberikan jarak di seluruh halaman
-          color: "white", // Warna teks putih untuk kontras
+        style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row", // Responsif: Kolom untuk layar kecil
+          background: "#A5D6A7", // Hijau muda untuk latar belakang utama
+          minHeight: "100vh", // Mengatur tinggi halaman agar memenuhi layar
         }}
       >
-        {/* Sidebar placeholder (Anda bisa menambahkan sidebar di sini jika diperlukan) */}
-        <div style={{ width: "230px", flexShrink: 0 }}></div>
-
+        <div
+          style={{
+            width: isMobile ? "100%" : "230px", // Lebar penuh untuk layar kecil
+            flexShrink: 0,
+            backgroundColor: "#81C784",
+            display: isMobile ? "none" : "block", // Sembunyikan di layar kecil
+          }}
+        ></div>
         {/* Tabel untuk menampilkan data minuman */}
-        <TableContainer component={Paper} sx={{ boxShadow: 3, borderRadius: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddDrink} // Memanggil fungsi handleAddDrink ketika diklik
-            style={{ marginBottom: "10px", backgroundColor: "#66BB6A" }} // Tombol hijau muda
+        <div style={{ flex: 1, padding: "20px" }}>
+          {/* Membungkus tabel dengan Paper untuk efek shadow */}
+          <TableContainer
+            component={Paper}
+            style={{
+              padding: isMobile ? "10px" : "20px", // Padding lebih kecil untuk layar kecil
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              borderRadius: "8px",
+            }}
           >
-            Tambah Data
-          </Button>
-          <Table sx={{ minWidth: 700 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                {/* Header tabel */}
-                <StyledTableCell>NO</StyledTableCell>
-                <StyledTableCell align="center">Nama Guru</StyledTableCell>
-                <StyledTableCell align="center">Mapel</StyledTableCell>
-                <StyledTableCell align="center">Nik</StyledTableCell>
-                <StyledTableCell align="center">Gender</StyledTableCell>
-                <StyledTableCell align="center">Jabatan</StyledTableCell>
-                <StyledTableCell align="center">Aksi</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {/* Menampilkan data dalam baris tabel */}
-              {drinks.map((drink, index) => (
-                <StyledTableRow key={drink.id}>
-                  {/* Menampilkan setiap kolom dalam tabel */}
-                  <StyledTableCell component="th" scope="row">
-                    {index + 1} {/* Nomor urut baris */}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{drink.namaguru}</StyledTableCell>
-                  <StyledTableCell align="center">{drink.mapel}</StyledTableCell>
-                  <StyledTableCell align="center">{drink.nik}</StyledTableCell>
-                  <StyledTableCell align="center">{drink.gender}</StyledTableCell>
-                  <StyledTableCell align="center">{drink.jabatan}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {/* Tombol aksi untuk edit dan delete */}
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(drink.id)} // Memanggil fungsi handleEdit ketika diklik
-                      style={{ marginRight: "5px" }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      color="error"
-                      onClick={() => handleDelete(drink.id)} // Memanggil fungsi handleDelete ketika diklik
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            {/* Tombol untuk menambah data */}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddDrink}
+              style={{
+                marginBottom: "20px",
+                backgroundColor: "#66BB6A",
+                fontSize: isMobile ? "12px" : "16px", // Ukuran font untuk tombol responsif
+              }}
+            >
+              Tambah Data
+            </Button>
+            <Table
+              sx={{ minWidth: 700 }}
+              aria-label="simple table"
+              size={isMobile ? "small" : "medium"} // Ukuran tabel responsif
+            >
+              <TableHead>
+                <TableRow>
+                  {/* Header tabel */}
+                  <StyledTableCell>NO</StyledTableCell>
+                  <StyledTableCell align="center">Nama Guru</StyledTableCell>
+                  <StyledTableCell align="center">Mapel</StyledTableCell>
+                  <StyledTableCell align="center">Nik</StyledTableCell>
+                  <StyledTableCell align="center">Gender</StyledTableCell>
+                  <StyledTableCell align="center">Jabatan</StyledTableCell>
+                  <StyledTableCell align="center">Aksi</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {/* Iterasi data drinks dan menampilkan setiap item dalam baris tabel */}
+                {drinks.map((drink, index) => (
+                  <StyledTableRow key={drink.id}>
+                    <StyledTableCell component="th" scope="row">
+                      {index + 1} {/* Menampilkan nomor urut */}
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {drink.namaguru}
+                    </StyledTableCell>{" "}
+                    {/* Menampilkan nama guru */}
+                    <StyledTableCell align="center">{drink.mapel}</StyledTableCell>{" "}
+                    {/* Menampilkan mapel */}
+                    <StyledTableCell align="center">{drink.nik}</StyledTableCell>{" "}
+                    {/* Menampilkan nik */}
+                    <StyledTableCell align="center">{drink.gender}</StyledTableCell>{" "}
+                    {/* Menampilkan gender */}
+                    <StyledTableCell align="center">
+                      {drink.jabatan}
+                    </StyledTableCell>{" "}
+                    {/* Menampilkan jabatan */}
+                    <StyledTableCell align="center">
+                      {/* Tombol edit dan delete */}
+                      <IconButton
+                        color="primary"
+                        onClick={() => handleEdit(drink.id)} // Fungsi untuk edit
+                        style={{ marginRight: "10px", backgroundColor: "#e8f5e9" }}
+                        aria-label="edit"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        onClick={() => handleDelete(drink.id)} // Fungsi untuk delete
+                        style={{ backgroundColor: "#ffebee" }}
+                        aria-label="delete"
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </>
   );

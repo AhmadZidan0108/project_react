@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Swal from "sweetalert2";
 import Navbar from "../component/Navbar";
+import Grid from "@mui/material/Grid"; // Import Grid untuk layout responsif
 
 export default function TambahDataguru() {
   const [namaguru, setDataguru] = useState(""); // State for teacher's name
@@ -55,117 +56,131 @@ export default function TambahDataguru() {
   return (
     <>
       <Navbar />
-      <div style={{ display: "flex", height: "100vh" }}>
-        <div style={{ width: "230px", flexShrink: 0 }}></div>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100vh",
-            backgroundColor: "#81c784", // Slightly darker green background color
-            padding: 3,
-          }}
-        >
-          <Paper
-            elevation={6}
-            sx={{
-              p: 4,
-              width: "90%",
-              maxWidth: 400,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              borderRadius: 3,
-              boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
-              background: "rgba(255, 255, 255, 0.9)",
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            <Typography
-              variant="h5"
+      <Box
+        sx={{
+          display: "flex",
+          height: "100vh",
+          justifyContent: "center",
+          alignItems: "center",
+          background: "#81c784", // Slightly darker green background color
+        }}
+      >
+        <Grid container justifyContent="center">
+          <Grid item xs={12} sm={8} md={6} lg={4}>
+            <Paper
+              elevation={6}
               sx={{
-                textAlign: "center",
-                mb: 2,
-                color: "#333",
-                fontWeight: "bold",
+                p: 4,
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                borderRadius: 3,
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)",
+                background: "rgba(255, 255, 255, 0.9)",
+                backdropFilter: "blur(10px)",
               }}
             >
-              Tambah Data Baru
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              {/* Input fields for the form */}
-              <TextField
-                label="Nama Guru"
-                variant="outlined"
-                fullWidth
-                value={namaguru}
-                onChange={(e) => setDataguru(e.target.value)}
-                sx={{ mb: 2, "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" } }}
-              />
-              <TextField
-                label="Mapel"
-                variant="outlined"
-                fullWidth
-                value={mapel}
-                onChange={(e) => setMapel(e.target.value)}
-                sx={{ mb: 2, "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" } }}
-              />
-              <TextField
-                label="Nik"
-                variant="outlined"
-                fullWidth
-                type="number"
-                value={nik}
-                onChange={(e) => setNik(e.target.value)}
-                sx={{ mb: 2, "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" } }}
-              />
-              <TextField
-                label="Gender"
-                variant="outlined"
-                fullWidth
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
-                sx={{ mb: 2, "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" } }}
-              />
-              <TextField
-                label="Jabatan"
-                variant="outlined"
-                fullWidth
-                value={jabatan}
-                onChange={(e) => setJabatan(e.target.value)}
-                sx={{ mb: 2, "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" } }}
-              />
-              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                {/* Cancel and Save buttons */}
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => navigate("/Dashboard")}
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "center",
+                  mb: 2,
+                  color: "#333",
+                  fontWeight: "bold",
+                  fontSize: "24px",
+                }}
+              >
+                Tambah Data Baru
+              </Typography>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="Nama Guru"
+                  variant="outlined"
+                  fullWidth
+                  value={namaguru}
+                  onChange={(e) => setDataguru(e.target.value)}
                   sx={{
-                    backgroundColor: "#ff5722",
-                    "&:hover": { backgroundColor: "#e64a19" },
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" },
                   }}
-                >
-                  Batal
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
+                />
+                <TextField
+                  label="Mapel"
+                  variant="outlined"
+                  fullWidth
+                  value={mapel}
+                  onChange={(e) => setMapel(e.target.value)}
                   sx={{
-                    backgroundColor: "#4caf50",
-                    "&:hover": { backgroundColor: "#388e3c" },
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" },
                   }}
-                >
-                  Simpan
-                </Button>
-              </Box>
-            </form>
-          </Paper>
-        </Box>
-      </div>
+                />
+                <TextField
+                  label="Nik"
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={nik}
+                  onChange={(e) => setNik(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" },
+                  }}
+                />
+                <TextField
+                  label="Gender"
+                  variant="outlined"
+                  fullWidth
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" },
+                  }}
+                />
+                <TextField
+                  label="Jabatan"
+                  variant="outlined"
+                  fullWidth
+                  value={jabatan}
+                  onChange={(e) => setJabatan(e.target.value)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": { backgroundColor: "#ffffff" },
+                  }}
+                />
+                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => navigate("/Dashboard")}
+                    sx={{
+                      backgroundColor: "#ff5722",
+                      "&:hover": { backgroundColor: "#e64a19" },
+                      width: "48%",
+                    }}
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    sx={{
+                      backgroundColor: "#4caf50",
+                      "&:hover": { backgroundColor: "#388e3c" },
+                      width: "48%",
+                    }}
+                  >
+                    Simpan
+                  </Button>
+                </Box>
+              </form>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 }
