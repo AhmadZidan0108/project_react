@@ -15,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import useMediaQuery from "@mui/material/useMediaQuery"; // Untuk mendeteksi ukuran layar
+import useMediaQuery from "@mui/material/useMediaQuery";
+import TextField from "@mui/material/TextField"; // Komponen untuk input pencarian
 
 // Styling untuk cell tabel, mengubah tampilan cell header dan body
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,6 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Dashboard() {
   const [drinks, setDrinks] = useState([]); // State untuk menyimpan data siswa
+  const [searchQuery, setSearchQuery] = useState(""); // State untuk search query
   const navigate = useNavigate(); // Hook untuk navigasi ke halaman lain
   const isMobile = useMediaQuery("(max-width:768px)"); // Deteksi jika layar berukuran kecil
 
@@ -90,13 +92,26 @@ export default function Dashboard() {
 
   // Fungsi untuk menavigasi ke halaman tambah data
   const handleAddDrink = () => {
-    navigate("/tambahsiswa"); // Arahkan ke halaman tambah siswa
+    navigate("/add-drink"); // Navigasi ke halaman tambah data
   };
 
-  // Fungsi untuk menavigasi ke halaman edit berdasarkan ID
+  // Fungsi untuk mengedit data
   const handleEdit = (id) => {
-    navigate(`/Ubahsiswa/${id}`); // Arahkan ke halaman edit siswa
+    navigate(`/edit-drink/${id}`); // Navigasi ke halaman edit dengan ID
   };
+
+  // Fungsi untuk menangani perubahan pada input pencarian
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value); // Update the search query
+  };
+
+  // Filter data berdasarkan search query
+  const filteredDrinks = drinks.filter((drink) => {
+    return (
+      (drink.namasiswa && drink.namasiswa.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (drink.nisn && String(drink.nisn).toLowerCase().includes(searchQuery.toLowerCase())) // Convert `nik` to string
+    );
+  });
 
   return (
     <>
@@ -143,6 +158,13 @@ export default function Dashboard() {
             >
               Tambah Data
             </Button>
+            <TextField
+              label="Cari Siswa"
+              variant="outlined"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              style={{ marginBottom: "20px", width: "100%" }}
+            />
             <Table
               sx={{ minWidth: 700 }}
               aria-label="simple table"
@@ -162,7 +184,7 @@ export default function Dashboard() {
               </TableHead>
               <TableBody>
                 {/* Iterasi data drinks dan menampilkan setiap item dalam baris tabel */}
-                {drinks.map((drink, index) => (
+                {filteredDrinks.map((drink, index) => (
                   <StyledTableRow key={drink.id}>
                     <StyledTableCell component="th" scope="row">
                       {index + 1} {/* Menampilkan nomor urut */}

@@ -16,6 +16,7 @@ import EditIcon from '@mui/icons-material/Edit'; // Ikon untuk Edit
 import DeleteIcon from '@mui/icons-material/Delete'; // Ikon untuk Delete
 import IconButton from '@mui/material/IconButton'; // Tombol untuk ikon
 import { Grid, useMediaQuery } from "@mui/material"; // Material-UI Grid untuk layout responsif
+import TextField from "@mui/material/TextField"; // Komponen untuk input pencarian
 
 // Styling untuk cell di header tabel
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,8 +41,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Dashboard() {
   const [drinks, setDrinks] = useState([]); // State untuk menyimpan data minuman (dalam hal ini data dari backend)
+  const [searchQuery, setSearchQuery] = useState(""); // Menambahkan state untuk pencarian
   const navigate = useNavigate(); // Hook untuk navigasi antar halaman
-  const isMobile = useMediaQuery("(max-width:768px)"); 
+  const isMobile = useMediaQuery("(max-width:768px)");
 
   // useEffect hook untuk mengambil data ketika komponen pertama kali dimuat
   useEffect(() => {
@@ -97,11 +99,26 @@ export default function Dashboard() {
     navigate(`/Ubahminuman/${id}`); // Menavigasi ke halaman ubah data untuk item tertentu
   };
 
+  // Fungsi untuk menangani perubahan input pencarian
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value); // Update kata kunci pencarian
+  };
+
+  // Filter data berdasarkan pencarian
+ const filteredDrinks = drinks.filter((drink) => {
+  return (
+    (drink.namaguru && drink.namaguru.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (drink.nik && String(drink.nik).toLowerCase().includes(searchQuery.toLowerCase())) // Convert `nik` to string
+  );
+});
+
+
+
   return (
     <>
       {/* Komponen Navbar untuk navigasi atas */}
       <Navbar />
-      <div 
+      <div
         style={{
           display: "flex",
           flexDirection: isMobile ? "column" : "row", // Responsif: Kolom untuk layar kecil
@@ -141,6 +158,14 @@ export default function Dashboard() {
             >
               Tambah Data
             </Button>
+            {/* Input untuk pencarian */}
+            <TextField
+              label="Cari Guru"
+              variant="outlined"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              style={{ marginBottom: "20px", width: "100%" }}
+            />
             <Table
               sx={{ minWidth: 700 }}
               aria-label="simple table"
@@ -160,7 +185,7 @@ export default function Dashboard() {
               </TableHead>
               <TableBody>
                 {/* Iterasi data drinks dan menampilkan setiap item dalam baris tabel */}
-                {drinks.map((drink, index) => (
+                {filteredDrinks.map((drink, index) => (
                   <StyledTableRow key={drink.id}>
                     <StyledTableCell component="th" scope="row">
                       {index + 1} {/* Menampilkan nomor urut */}
