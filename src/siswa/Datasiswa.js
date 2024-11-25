@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import useMediaQuery from "@mui/material/useMediaQuery"; // Untuk mendeteksi ukuran layar
 
 // Styling untuk cell tabel, mengubah tampilan cell header dan body
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -38,8 +39,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function Dashboard() {
-  const [drinks, setDrinks] = useState([]); // State untuk menyimpan data minuman (atau siswa)
+  const [drinks, setDrinks] = useState([]); // State untuk menyimpan data siswa
   const navigate = useNavigate(); // Hook untuk navigasi ke halaman lain
+  const isMobile = useMediaQuery("(max-width:768px)"); // Deteksi jika layar berukuran kecil
 
   // useEffect untuk memuat data saat komponen pertama kali dirender
   useEffect(() => {
@@ -99,28 +101,53 @@ export default function Dashboard() {
   return (
     <>
       <Navbar /> {/* Menampilkan Navbar */}
-      <div style={{
-        display: 'flex',
-        background: '#A5D6A7', // Hijau muda untuk latar belakang utama
-        minHeight: '100vh' // Mengatur tinggi halaman agar memenuhi layar
-      }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row", // Responsif: Kolom untuk layar kecil
+          background: "#A5D6A7", // Hijau muda untuk latar belakang utama
+          minHeight: "100vh", // Mengatur tinggi halaman agar memenuhi layar
+        }}
+      >
         {/* Sidebar kosong */}
-        <div style={{ width: '230px', flexShrink: 0, backgroundColor: '#81C784' }}></div>
+        <div
+          style={{
+            width: isMobile ? "100%" : "230px", // Lebar penuh untuk layar kecil
+            flexShrink: 0,
+            backgroundColor: "#81C784",
+            display: isMobile ? "none" : "block", // Sembunyikan di layar kecil
+          }}
+        ></div>
 
         {/* Konten utama */}
-        <div style={{ flex: 1, padding: '20px' }}>
+        <div style={{ flex: 1, padding: "20px" }}>
           {/* Membungkus tabel dengan Paper untuk efek shadow */}
-          <TableContainer component={Paper} style={{ padding: '20px', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)', borderRadius: '8px' }}>
+          <TableContainer
+            component={Paper}
+            style={{
+              padding: isMobile ? "10px" : "20px", // Padding lebih kecil untuk layar kecil
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              borderRadius: "8px",
+            }}
+          >
             {/* Tombol untuk menambah data */}
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddDrink}
-              style={{ marginBottom: "20px", backgroundColor: '#66BB6A' }} // Tombol dengan hijau muda
+              style={{
+                marginBottom: "20px",
+                backgroundColor: "#66BB6A",
+                fontSize: isMobile ? "12px" : "16px", // Ukuran font untuk tombol responsif
+              }}
             >
               Tambah Data
             </Button>
-            <Table sx={{ minWidth: 700 }} aria-label="simple table">
+            <Table
+              sx={{ minWidth: 700 }}
+              aria-label="simple table"
+              size={isMobile ? "small" : "medium"} // Ukuran tabel responsif
+            >
               <TableHead>
                 <TableRow>
                   {/* Header tabel */}
@@ -140,17 +167,26 @@ export default function Dashboard() {
                     <StyledTableCell component="th" scope="row">
                       {index + 1} {/* Menampilkan nomor urut */}
                     </StyledTableCell>
-                    <StyledTableCell align="center">{drink.namasiswa}</StyledTableCell> {/* Menampilkan nama siswa */}
-                    <StyledTableCell align="center">{drink.kelas}</StyledTableCell> {/* Menampilkan kelas siswa */}
-                    <StyledTableCell align="center">{drink.jurusan}</StyledTableCell> {/* Menampilkan jurusan */}
-                    <StyledTableCell align="center">{drink.nisn}</StyledTableCell> {/* Menampilkan NISN */}
-                    <StyledTableCell align="center">{drink.asalsekolah}</StyledTableCell> {/* Menampilkan asal sekolah */}
+                    <StyledTableCell align="center">
+                      {drink.namasiswa}
+                    </StyledTableCell>{" "}
+                    {/* Menampilkan nama siswa */}
+                    <StyledTableCell align="center">{drink.kelas}</StyledTableCell>{" "}
+                    {/* Menampilkan kelas siswa */}
+                    <StyledTableCell align="center">{drink.jurusan}</StyledTableCell>{" "}
+                    {/* Menampilkan jurusan */}
+                    <StyledTableCell align="center">{drink.nisn}</StyledTableCell>{" "}
+                    {/* Menampilkan NISN */}
+                    <StyledTableCell align="center">
+                      {drink.asalsekolah}
+                    </StyledTableCell>{" "}
+                    {/* Menampilkan asal sekolah */}
                     <StyledTableCell align="center">
                       {/* Tombol edit dan delete */}
                       <IconButton
                         color="primary"
                         onClick={() => handleEdit(drink.id)} // Fungsi untuk edit
-                        style={{ marginRight: "10px", backgroundColor: '#e8f5e9' }}
+                        style={{ marginRight: "10px", backgroundColor: "#e8f5e9" }}
                         aria-label="edit"
                       >
                         <EditIcon />
@@ -158,7 +194,7 @@ export default function Dashboard() {
                       <IconButton
                         color="error"
                         onClick={() => handleDelete(drink.id)} // Fungsi untuk delete
-                        style={{ backgroundColor: '#ffebee' }}
+                        style={{ backgroundColor: "#ffebee" }}
                         aria-label="delete"
                       >
                         <DeleteIcon />

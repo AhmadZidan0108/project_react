@@ -7,11 +7,11 @@ import Typography from "@mui/material/Typography"; // Mengimpor komponen Typogra
 import Box from "@mui/material/Box"; // Mengimpor komponen Box untuk layouting
 import Paper from "@mui/material/Paper"; // Mengimpor komponen Paper untuk membuat elemen seperti kartu
 import Swal from "sweetalert2"; // Mengimpor SweetAlert2 untuk menampilkan alert
-import Navbar from "../component/Navbar";
+import Navbar from "../component/Navbar"; // Mengimpor Navbar
 
 export default function EditData() {
-  // Mendeklarasikan state untuk menyimpan data inputan form
-  const [namaguru, setNamaguru] = useState(""); 
+  // State untuk menyimpan data inputan dari form
+  const [namaguru, setNamaguru] = useState("");
   const [mapel, setMapel] = useState("");
   const [nik, setNik] = useState("");
   const [gender, setGender] = useState("");
@@ -19,65 +19,65 @@ export default function EditData() {
   const { id } = useParams(); // Mengambil parameter 'id' dari URL
   const navigate = useNavigate(); // Hook untuk melakukan navigasi
 
-  // useEffect untuk mengambil data saat pertama kali komponen di render
+  // useEffect untuk mengambil data awal saat komponen pertama kali di-render
   useEffect(() => {
     if (!id) {
       Swal.fire("Gagal!", "ID data tidak valid!", "error");
       return;
     }
 
-    const fetchFood = async () => {
+    const fetchData = async () => {
       try {
-        // Mengambil data berdasarkan ID dari API
+        // Meminta data berdasarkan ID dari API
         const response = await axios.get(`http://localhost:3030/foods/${id}`);
-        const food = response.data;
+        const data = response.data;
 
-        if (!food) {
+        if (!data) {
           Swal.fire("Gagal!", "Data tidak ditemukan.", "error");
           navigate("/Dataguru"); // Jika data tidak ditemukan, navigasi ke halaman Data Guru
           return;
         }
 
-        // Mengupdate state dengan data yang didapatkan dari API
-        setNamaguru(food.namaguru);
-        setMapel(food.mapel);
-        setNik(food.nik);
-        setGender(food.gender);
-        setJabatan(food.jabatan);
+        // Mengisi state dengan data yang diperoleh dari API
+        setNamaguru(data.namaguru);
+        setMapel(data.mapel);
+        setNik(data.nik);
+        setGender(data.gender);
+        setJabatan(data.jabatan);
       } catch (error) {
         console.error("Error fetching data:", error);
         Swal.fire("Gagal!", "Terjadi kesalahan saat mengambil data.", "error");
-        navigate("/Dataguru"); // Jika terjadi error, navigasi ke halaman Data Guru
+        navigate("/Dataguru"); // Navigasi jika terjadi error
       }
     };
 
-    fetchFood();
-  }, [id, navigate]); // useEffect dijalankan setiap kali 'id' atau 'navigate' berubah
+    fetchData();
+  }, [id, navigate]); // useEffect dijalankan ulang jika 'id' atau 'navigate' berubah
 
-  // Fungsi untuk menangani form submit
+  // Fungsi untuk menangani pengiriman form
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Mencegah reload halaman saat form disubmit
+    e.preventDefault(); // Mencegah reload halaman saat form dikirim
 
-    // Validasi untuk memastikan semua data yang diperlukan sudah diisi
+    // Validasi input
     if (!namaguru || !nik) {
       Swal.fire("Gagal!", "Semua data wajib diisi!", "error");
       return;
     }
 
     try {
-      const updatedDataguru = {
+      const updatedData = {
         namaguru,
         mapel,
-        nik: parseInt(nik), // Mengubah nik menjadi angka
+        nik: parseInt(nik), // Konversi 'nik' ke tipe angka
         gender,
         jabatan,
       };
 
-      // Mengirimkan data yang sudah diperbarui ke server
-      await axios.put(`http://localhost:3030/foods/${id}`, updatedDataguru);
+      // Mengirim data yang telah diubah ke API
+      await axios.put(`http://localhost:3030/foods/${id}`, updatedData);
 
       Swal.fire("Berhasil!", "Perubahan data berhasil disimpan.", "success");
-      navigate("/Dataguru"); // Setelah berhasil, navigasi ke halaman Data Guru
+      navigate("/Dataguru"); // Navigasi ke halaman Data Guru setelah berhasil
     } catch (error) {
       console.error("Error updating data:", error);
       Swal.fire("Gagal!", "Terjadi kesalahan saat menyimpan perubahan data.", "error");
@@ -86,60 +86,51 @@ export default function EditData() {
 
   return (
     <>
-      <Navbar /> {/* Menampilkan Navbar */}
+      <Navbar /> {/* Menampilkan komponen Navbar */}
       <div style={{ display: "flex", height: "100vh" }}>
         <div style={{ width: "230px", flexShrink: 0 }}></div>
-
-        {/* Latar belakang diperbesar dengan efek gradasi */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
-            width: "100%", // Memastikan kotak mengisi seluruh lebar layar
-            background: "linear-gradient(135deg, #81c784, #4caf50)", // Gradasi warna hijau yang lebih tua
-            backgroundSize: "cover", // Menutupi area secara proporsional
-            backgroundAttachment: "fixed", // Latar belakang tetap saat scroll
-            padding: 3, // Ruang di dalam
+            width: "100%", // Kotak mengisi lebar penuh
+            background: "linear-gradient(135deg, #81c784, #4caf50)", // Gradasi hijau
+            padding: 3, // Menambahkan padding
           }}
         >
           <Paper
             elevation={6}
             sx={{
               p: 4,
-              width: "400px",
+              maxWidth: "90%", // Membuat lebar maksimum responsif
+              width: "400px", // Default lebar untuk layar besar
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
               gap: 2,
-              backgroundColor: "#f4faff", // Warna lembut biru pucat
-              borderRadius: "16px", // Sudut lebih melengkung
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)", // Efek bayangan untuk estetika
+              backgroundColor: "#f4faff", // Warna lembut
+              borderRadius: "16px", // Sudut melengkung
             }}
           >
             <Typography
               variant="h4"
               sx={{
                 textAlign: "center",
-                mb: 2,
-                color: "#4caf50", // Warna hijau lembut
+                color: "#4caf50", // Warna hijau
                 fontWeight: "500",
-                letterSpacing: "1px",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.2)",
-                fontFamily: "'Poppins', sans-serif",
+                mb: 2,
               }}
             >
               Edit Data
             </Typography>
-            {/* Form untuk mengedit data */}
             <form onSubmit={handleSubmit}>
               <TextField
                 label="Nama Guru"
                 variant="outlined"
                 fullWidth
                 value={namaguru}
-                onChange={(e) => setNamaguru(e.target.value)} // Mengupdate state 'namaguru'
+                onChange={(e) => setNamaguru(e.target.value)} // Mengubah state
                 sx={{ mb: 2 }}
               />
               <TextField
@@ -147,7 +138,7 @@ export default function EditData() {
                 variant="outlined"
                 fullWidth
                 value={mapel}
-                onChange={(e) => setMapel(e.target.value)} // Mengupdate state 'mapel'
+                onChange={(e) => setMapel(e.target.value)}
                 sx={{ mb: 2 }}
               />
               <TextField
@@ -156,7 +147,7 @@ export default function EditData() {
                 fullWidth
                 type="number"
                 value={nik}
-                onChange={(e) => setNik(e.target.value)} // Mengupdate state 'nik'
+                onChange={(e) => setNik(e.target.value)}
                 sx={{ mb: 2 }}
               />
               <TextField
@@ -164,7 +155,7 @@ export default function EditData() {
                 variant="outlined"
                 fullWidth
                 value={gender}
-                onChange={(e) => setGender(e.target.value)} // Mengupdate state 'gender'
+                onChange={(e) => setGender(e.target.value)}
                 sx={{ mb: 2 }}
               />
               <TextField
@@ -172,20 +163,18 @@ export default function EditData() {
                 variant="outlined"
                 fullWidth
                 value={jabatan}
-                onChange={(e) => setJabatan(e.target.value)} // Mengupdate state 'jabatan'
+                onChange={(e) => setJabatan(e.target.value)}
                 sx={{ mb: 2 }}
               />
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <Box sx={{ textAlign: "center", mt: 2 }}>
                 <Button
                   variant="contained"
                   color="primary"
                   type="submit"
                   sx={{
                     textTransform: "none",
-                    backgroundColor: "#1e90ff", // Warna biru cerah
-                    "&:hover": {
-                      backgroundColor: "#0056b3", // Warna biru lebih gelap saat hover
-                    },
+                    backgroundColor: "#1e90ff",
+                    "&:hover": { backgroundColor: "#0056b3" },
                   }}
                 >
                   Simpan Perubahan
